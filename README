@@ -1,0 +1,60 @@
+config.var => Variables sourced by start.sh
+start.sh => Running setup scripts
+
+EC2 Commands to create and clone instances with Common Script Replication
+
+# Paths
+export PATH=$PATH:$HOME/bin:$HOME/.ec2/ec2-api/bin:$HOME/bin/
+export JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64
+
+# EC2 Env
+export EC2_HOME=$HOME/.ec2/ec2-api
+export EC2_URL='https://ec2.us-west-1.amazonaws.com' # Default service site 
+export EC2_PRIVATE_KEY=~/.ec2/pk-acct.pem
+export EC2_CERT=~/.ec2/cert-acct.pem
+
+# EC2 Regions
+alias ec2.region.eu-west-1='export EC2_URL="https://ec2.eu-west-1.amazonaws.com"'
+alias ec2.region.us-east-1='export EC2_URL="https://ec2.us-east-1.amazonaws.com"'
+alias ec2.region.us-west-1='export EC2_URL="https://ec2.us-west-1.amazonaws.com"'
+alias ec2.region.ap-southeast-1='export EC2_URL="https://ec2.ap-southeast-1.amazonaws.com"'
+alias ec2.env='env | egrep "(JAVA_HOME|AWS|EC2)"'
+ 
+# EC2 Auth
+alias ec2.auth.01='ec2-describe-group -v'
+alias ec2.auth.02='ec2-describe-keypairs'
+alias ec2.auth.03='ec2-add-keypair launch > .ssh/launch'
+alias ec2.auth.04='ec2-describe-keypair'
+alias ec2.auth.05='ec2-authorize default -p22 -s1.2.3.4/32'
+
+# EC2 Instances and volumes
+alias ec2.run.00='ec2-describe-images -a'
+alias ec2.run.01='ec2-run-instances  ami-e32273a6 -t m1.small -k launch -z us-west-1a' # -b '/dev/sdc=snap-f7a44b9d:80:false' -d 'mount /dev/sdc /mnt/e'
+alias ec2.run.02='ec2-get-console-output'
+alias ec2.run.03='ec2-create-volume -s5 -z us-west-1a'
+alias ec2.run.04='ec2-create-volume -s5 -z ap-southeast-1a'
+alias ec2.run.05='ec2-create-volume --snapshot snap-f7a44b9d -z us-west-1a'
+alias ec2.run.06='ec2-attach-volume vol-xxxxxxxx -i i-xxxxxxxx -d /dev/sdc'
+alias ec2.run.07='ec2-attach-volume vol-xxxxxxxx -i {instance_id}'
+alias ec2.run.08='ec2-describe-volumes'
+alias ec2.run.09='ec2-create-snapshot vol-xxxxxxxx'
+
+# (mt) API Key
+source ~/.mt/mtkey
+source ~/.mt/mtservice
+
+# (mt) ve01 commands
+alias ve01.FirewallFlush='curl -D log.txt -s -X "POST" "https://api.mediatemple.net/api/v1/services/${mtservice}/firewall/flush?apikey=${mtkey}"|python26 -mjson.tool'
+alias ve01.ServiceInfo='curl -D log.txt -s -X "GET" "https://api.mediatemple.net/api/v1/services/${mtservice}.json?apikey=${mtkey}"|python26 -mjson.tool'
+alias ve01.Reboot='curl -D log.txt -s -X "POST" "https: //api.mediatemple.net/api/v1/services/${mtservice}/reboot.json?apikey=${mtkey}|python26 -mjson.tool"'
+alias ve01.Status='curl -D log.txt -s -X "GET" "https://api.mediatemple.net/api/v1/stats/${mtservice}.json?apikey=${mtkey}"|python26 -mjson.tool'
+
+# (mt) API commands
+alias mt.get.ids='curl -D log.txt -s -X "GET" "https://api.mediatemple.net/api/v1/services/ids.json?apikey=${mtkey}" | python26 -mjson.tool'
+alias mt.get.warnings='curl -D log.txt -s -X "GET" "https://api.mediatemple.net/api/v1/stats/warnings.json?apikey=${mtkey}" | python26 -mjson.tool'
+mt.get.svcinfo () { curl -D log.txt -s -X "GET" "https://api.mediatemple.net/api/v1/services/$@.json?apikey=${mtkey}" | python26 -mjson.tool; } 
+mt.firewall.flush () { curl -D log.txt -s -X "POST" "https://api.mediatemple.net/api/v1/services/$@/firewall/flush?apikey=${mtkey}" | python26 -mjson.tool; }
+mt.reboot () { curl -D log.txt -s -X "POST" "https: //api.mediatemple.net/api/v1/services/$@/reboot.json?apikey=${mtkey} | python26 -mjson.tool"; }
+mt.status () { curl -D log.txt -s -X "POST" "https://api.mediatemple.net/api/v1/services/$@/firewall/flush?apikey=${mtkey}" | python26 -mjson.tool; }
+
+
