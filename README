@@ -57,4 +57,3 @@ mt.firewall.flush () { curl -D log.txt -s -X "POST" "https://api.mediatemple.net
 mt.reboot () { curl -D log.txt -s -X "POST" "https: //api.mediatemple.net/api/v1/services/$@/reboot.json?apikey=${mtkey} | python26 -mjson.tool"; }
 mt.status () { curl -D log.txt -s -X "POST" "https://api.mediatemple.net/api/v1/services/$@/firewall/flush?apikey=${mtkey}" | python26 -mjson.tool; }
 
-
