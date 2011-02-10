@@ -1,4 +1,5 @@
 #!/bin/bash
+# Example only...
 # install mysql
 ln -s /mnt/e/var/lib/mysql/ /var/lib/mysql
 cd /mnt/e/install/mysql5.5

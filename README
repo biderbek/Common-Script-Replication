@@ -1,7 +1,14 @@
-config.var => Variables sourced by start.sh
-start.sh => Running setup scripts
+# Scripts and commands from:
+# UUASC Talk "From Racks to Clouds: A case study with multiplayer online games" by John Sharpe
+# http://www.bolthole.com/uuala/
+#
+# Released under the GNU GENERAL PUBLIC LICENSE Version 3
+#
+# 
+# config.var => Variables sourced by start.sh and start-{install_script_name}.sh
+# start.sh => Configure machine after provisioned with setup scripts from install/setup/.
 
-EC2 Commands to create and clone instances with Common Script Replication
+# EC2 Commands to create and clone instances with Common Script Replication
 
 # Paths
 export PATH=$PATH:$HOME/bin:$HOME/.ec2/ec2-api/bin:$HOME/bin/
@@ -29,7 +36,7 @@ alias ec2.auth.05='ec2-authorize default -p22 -s1.2.3.4/32'
 
 # EC2 Instances and volumes
 alias ec2.run.00='ec2-describe-images -a'
-alias ec2.run.01='ec2-run-instances  ami-e32273a6 -t m1.small -k launch -z us-west-1a' # -b '/dev/sdc=snap-f7a44b9d:80:false' -d 'mount /dev/sdc /mnt/e'
+alias ec2.run.01='ec2-run-instances  ami-e32273a6 -t m1.small -k launch -z us-west-1a' # -b '/dev/sdc=snap-fxxxxxxx:80:false' -d 'mount /dev/sdc /mnt/e'
 alias ec2.run.02='ec2-get-console-output'
 alias ec2.run.03='ec2-create-volume -s5 -z us-west-1a'
 alias ec2.run.04='ec2-create-volume -s5 -z ap-southeast-1a'
@@ -38,6 +45,8 @@ alias ec2.run.06='ec2-attach-volume vol-xxxxxxxx -i i-xxxxxxxx -d /dev/sdc'
 alias ec2.run.07='ec2-attach-volume vol-xxxxxxxx -i {instance_id}'
 alias ec2.run.08='ec2-describe-volumes'
 alias ec2.run.09='ec2-create-snapshot vol-xxxxxxxx'
+
+# (mt) API commands
 
 # (mt) API Key
 source ~/.mt/mtkey

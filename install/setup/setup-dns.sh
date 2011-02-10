@@ -1,0 +1,3 @@
+#!/bin/bash
+# Example only...
+echo '' > /etc/motd
